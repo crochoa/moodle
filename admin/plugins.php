@@ -143,7 +143,8 @@ if ($delete and $confirmed) {
     if (function_exists('opcache_reset')) {
         opcache_reset();
     }
-    redirect($PAGE->url);
+    // We need to execute upgrade to make sure everything including caches is up to date.
+    redirect(new moodle_url('/admin/index.php'));
 }
 
 $checker = available_update_checker::instance();

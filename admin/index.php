@@ -59,6 +59,10 @@ if (empty($_GET['cache']) and empty($_POST['cache']) and empty($_GET['sesskey'])
     if (function_exists('opcache_reset')) {
         opcache_reset();
     }
+    $cache = 0;
+
+} else {
+    $cache = 1;
 }
 
 require('../config.php');
@@ -74,7 +78,6 @@ $showallplugins = optional_param('showallplugins', 0, PARAM_BOOL);
 $agreelicense   = optional_param('agreelicense', 0, PARAM_BOOL);
 $fetchupdates   = optional_param('fetchupdates', 0, PARAM_BOOL);
 $newaddonreq    = optional_param('installaddonrequest', null, PARAM_RAW);
-$cache          = optional_param('cache', 0, PARAM_BOOL);
 
 // Set up PAGE.
 $url = new moodle_url('/admin/index.php');
@@ -228,7 +231,7 @@ if ($cache) {
     }
 }
 
-if ($version > $CFG->version) {  // upgrade
+if (!$cache and $version > $CFG->version) {  // upgrade
     // We purge all of MUC's caches here.
     // Caches are disabled for upgrade by CACHE_DISABLE_ALL so we must set the first arg to true.
     // This ensures a real config object is loaded and the stores will be purged.
@@ -333,15 +336,15 @@ if ($version > $CFG->version) {  // upgrade
 }
 
 // Updated human-readable release version if necessary
-if ($release <> $CFG->release) {  // Update the release version
+if (!$cache and $release <> $CFG->release) {  // Update the release version
     set_config('release', $release);
 }
 
-if ($branch <> $CFG->branch) {  // Update the branch
+if (!$cache and $branch <> $CFG->branch) {  // Update the branch
     set_config('branch', $branch);
 }
 
-if (moodle_needs_upgrading()) {
+if (!$cache and moodle_needs_upgrading()) {
     if (!$PAGE->headerprinted) {
         // means core upgrade or installation was not already done
         if (!$confirmplugins) {
@@ -450,8 +453,8 @@ if (during_initial_install()) {
 
 // Now we can be sure everything was upgraded and caches work fine,
 // redirect if necessary to make sure caching is enabled.
-if (!$cache and !optional_param('sesskey', '', PARAM_RAW)) {
-    redirect(new moodle_url($PAGE->url, array('cache' => 1)));
+if (!$cache) {
+    redirect(new moodle_url('/admin/index.php', array('cache' => 1)));
 }
 
 // Check for valid admin user - no guest autologin

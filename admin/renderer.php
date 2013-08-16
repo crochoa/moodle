@@ -412,6 +412,10 @@ class core_admin_renderer extends plugin_renderer_base {
 
         $pluginname = $pluginman->plugin_name($pluginfo->component);
 
+        // Do not show navigation here, they must click one of the buttons.
+        $this->page->set_pagelayout('maintenance');
+        $this->page->set_cacheable(false);
+
         $output .= $this->output->header();
         $output .= $this->output->heading(get_string('uninstalling', 'core_plugin', array('name' => $pluginname)));
 
@@ -425,7 +429,8 @@ class core_admin_renderer extends plugin_renderer_base {
                 'uninstalldeleteconfirmexternal');
         }
 
-        $output .= $this->output->confirm($confirm, $continueurl, $this->page->url);
+        // After any uninstall we must execute full upgrade to finish the cleanup!
+        $output .= $this->output->confirm($confirm, $continueurl, new moodle_url('/admin/index.php'));
         $output .= $this->output->footer();
 
         return $output;

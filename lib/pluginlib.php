@@ -839,9 +839,13 @@ class plugin_manager {
             'tool' => array(
                 'assignmentupgrade', 'behat', 'capability', 'customlang',
                 'dbtransfer', 'generator', 'health', 'innodb', 'installaddon',
-                'langimport', 'multilangupgrade', 'phpunit', 'profiling',
+                'langimport', 'log', 'multilangupgrade', 'phpunit', 'profiling',
                 'qeupgradehelper', 'replace', 'spamcleaner', 'timezoneimport',
                 'unittest', 'uploadcourse', 'uploaduser', 'unsuproles', 'xmldb'
+            ),
+
+            'logstore' => array(
+                'database', 'legacy', 'standard',
             ),
 
             'webservice' => array(

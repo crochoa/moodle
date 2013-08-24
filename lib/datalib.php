@@ -1550,6 +1550,38 @@ function coursemodule_visible_for_user($cm, $userid=0) {
 /// LOG FUNCTIONS /////////////////////////////////////////////////////
 
 /**
+ * Get instance of log manager.
+ *
+ * @param bool $forcereload
+ * @return \core\log\manager
+ */
+function get_log_manager($forcereload = false) {
+    /** @var \core\log\manager $singleton */
+    static $singleton = null;
+
+    if ($forcereload and isset($singleton)) {
+        $singleton->dispose();
+        $singleton = null;
+    }
+
+    if (isset($singleton)) {
+        return $singleton;
+    }
+
+    $classname = '\tool_log\log\manager';
+    if (defined('LOG_MANAGER_CLASS')) {
+        $classname = LOG_MANAGER_CLASS;
+    }
+
+    if (!class_exists($classname)) {
+        $classname = '\core\log\dummy_manager';
+    }
+
+    $singleton = new $classname();
+    return $singleton;
+}
+
+/**
  * Add an entry to the config log table.
  *
  * These are "action" focussed rather than web server hits,

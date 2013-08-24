@@ -1,0 +1,13 @@
+Grrrr:
+
+1/ 'level' is reserved DB word - we must change event base property name
+2/ admin tool subplugins are much nicer
+3/ public function can_access($user = null) does not know context, we need it otherwise teachers are f...!
+4/ writer::store() should get the manager if we want to share the filtering
+5/ we need some dispose() magic
+6/ 'storage' word is too long, 'store' should be better - we need the subsystem name as short as possible
+
+
+TODO:
+* standard db table indexes - timecreated, component, etc.?
+
